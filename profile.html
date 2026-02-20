@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Étudiant Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .profile-container {
+            padding: 40px 0;
+        }
+        
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .profile-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .profile-sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            height: fit-content;
+        }
+        
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+        }
+        
+        .avatar-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #f8f9fa;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .avatar-upload {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+        
+        .avatar-upload input {
+            display: none;
+        }
+        
+        .profile-stats {
+            margin-top: 25px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: var(--gray-color);
+        }
+        
+        .stat-value {
+            font-weight: 600;
+        }
+        
+        .profile-main {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 25px;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray-color);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .danger-zone {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px solid #ffebee;
+        }
+        
+        .danger-zone h3 {
+            color: var(--danger-color);
+            margin-bottom: 15px;
+        }
+        
+        .danger-zone p {
+            color: var(--gray-color);
+            margin-bottom: 20px;
+        }
+        
+        .account-delete-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .account-delete-btn:hover {
+            background: #d32f2f;
+        }
+        
+        .password-strength {
+            margin-top: 5px;
+            height: 5px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .strength-weak {
+            background: var(--danger-color);
+        }
+        
+        .strength-medium {
+            background: var(--warning-color);
+        }
+        
+        .strength-strong {
+            background: var(--success-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Éduc</span>Pro
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
+                <a href="cours.html"><i class="fas fa-folder"></i> Documents</a>
+                <a href="quiz.html"><i class="fas fa-question-circle"></i> Quiz</a>
+                <a href="reminders.html"><i class="fas fa-bell"></i> Rappels</a>
+                <a href="profile.html" class="active"><i class="fas fa-user"></i> Profil</a>
+            </div>
+            
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Profil Section -->
+    <section class="profile-container">
+        <div class="container">
+            <div class="profile-header">
+                <h1>Mon Profil</h1>
+                <div class="user-info">
+                    <span class="user-name">Chargement...</span>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <!-- Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="profile-avatar">
+                        <div class="avatar-container">
+                            <img id="avatarImage" src="https://ui-avatars.com/api/?name=Utilisateur&background=4361ee&color=fff&size=150" alt="Avatar" class="avatar-image">
+                            <label class="avatar-upload" title="Changer la photo">
+                                <i class="fas fa-camera"></i>
+                                <input type="file" id="avatarUpload" accept="image/*">
+                            </label>
+                        </div>
+                        <h2 id="userFullName">Chargement...</h2>
+                        <p id="userEmail" style="color: var(--gray-color);">Chargement...</p>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Inscrit depuis</span>
+                            <span class="stat-value" id="memberSince">--/--/----</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Quiz complétés</span>
+                            <span class="stat-value" id="quizzesCompleted">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Documents sauvegardés</span>
+                            <span class="stat-value" id="documentsSaved">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Rappels actifs</span>
+                            <span class="stat-value" id="activeReminders">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenu principal -->
+                <div class="profile-main">
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" data-tab="info">Informations personnelles</button>
+                        <button class="tab-btn" data-tab="security">Sécurité</button>
+                        <button class="tab-btn" data-tab="preferences">Préférences</button>
+                    </div>
+                    
+                    <!-- Onglet Informations -->
+                    <div class="tab-content active" id="infoTab">
+                        <h2>Informations personnelles</h2>
+                        <p style="color: var(--gray-color); margin-bottom: 25px;">
+                            Gérez vos informations personnelles et vos préférences de compte.
+                        </p>
+                        
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="profileName">Nom complet *</label>
+                                <input type="text" id="profileName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileEmail">Adresse email *</label>
+                                <input type="email" id="profileEmail" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profilePhone">Téléphone</label>
+                                <input type="tel" id="profilePhone" placeholder="+33 1 23 45 67 89">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileStudyLevel">Niveau d'études</label>
+                                <select id="profileStudyLevel">
+                                    <option value="">Sélectionnez votre niveau</option>
+                                    <option value="lycee">Lycée</option>
+                                    <option value="bac1">BAC+1</option>
+                                    <option value="bac2">BAC+2</option>
+                                    <option value="bac3">BAC+3</option>
+                                    <option value="bac4">BAC+4</option>
+                                    <option value="bac5">BAC+5</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileField">Domaine d'études</label>
+                                <input type="text" id="profileField" placeholder="Ex: Informatique, Médecine, Droit...">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileUniversity">Établissement</label>
+                                <input type="text" id="profileUniversity" placeholder="Ex: Université de Paris">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profileBio">Biographie</label>
+                                <textarea id="profileBio" rows="4" placeholder="Parlez-nous de vous..."></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Enregistrer les modifications</button>
+                                <button type="button" class="btn-secondary" id="cancelProfileChanges">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Onglet Sécurité -->
+                    <div class="tab-content" id="securityTab">
+                        <h2>Changer le mot de passe</h2>
+                        <p style="color: var(--gray-color); margin-bottom: 25px;">
+                            Pour modifier votre mot de passe, veuillez remplir les champs ci-dessous.
+                        </p>
+                        
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">Mot de passe actuel *</label>
+                                <input type="password" id="currentPassword" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newPassword">Nouveau mot de passe *</label>
+                                <input type="password" id="newPassword" required>
+                                <div class="password-strength">
+                                    <div class="strength-meter" id="passwordStrength"></div>
+                                </div>
+                                <small style="color: var(--gray-color); display: block; margin-top: 5px;">
+                                    Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.
+                                </small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="confirmNewPassword">Confirmer le nouveau mot de passe *</label>
+                                <input type="password" id="confirmNewPassword" required>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Changer le mot de passe</button>
+                            </div>
+                        </form>
+                        
+                        <div class="danger-zone">
+                            <h3>Zone de danger</h3>
+                            <p>
+                                La suppression de votre compte est irréversible. Toutes vos données seront définitivement supprimées.
+                            </p>
+                            <button class="account-delete-btn" id="deleteAccountBtn">
+                                <i class="fas fa-trash"></i> Supprimer mon compte
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Onglet Préférences -->
+                    <div class="tab-content" id="preferencesTab">
+                        <h2>Préférences</h2>
+                        <p style="color: var(--gray-color); margin-bottom: 25px;">
+                            Personnalisez votre expérience sur la plateforme.
+                        </p>
+                        
+                        <form id="preferencesForm">
+                            <div class="form-group">
+                                <label for="language">Langue</label>
+                                <select id="language">
+                                    <option value="fr">Français</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="theme">Thème</label>
+                                <select id="theme">
+                                    <option value="light">Clair</option>
+                                    <option value="dark">Sombre</option>
+                                    <option value="auto">Auto (suivre l'appareil)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="notificationsEmail">Notifications par email</label>
+                                <div style="margin-top: 10px;">
+                                    <input type="checkbox" id="notificationsEmail" style="width: auto; margin-right: 10px;">
+                                    <label for="notificationsEmail" style="display: inline;">Recevoir des notifications par email</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="notificationsReminders">Notifications de rappels</label>
+                                <div style="margin-top: 10px;">
+                                    <input type="checkbox" id="notificationsReminders" style="width: auto; margin-right: 10px;">
+                                    <label for="notificationsReminders" style="display: inline;">Recevoir des notifications pour les rappels</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="weeklyReport">Rapport hebdomadaire</label>
+                                <div style="margin-top: 10px;">
+                                    <input type="checkbox" id="weeklyReport" style="width: auto; margin-right: 10px;">
+                                    <label for="weeklyReport" style="display: inline;">Recevoir un rapport hebdomadaire de progression</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Enregistrer les préférences</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

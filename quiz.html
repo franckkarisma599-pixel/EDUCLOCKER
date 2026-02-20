@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de révision - Étudiant Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .quiz-container {
+            padding: 40px 0;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .quiz-timer {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            background: #eef2ff;
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+        
+        .subject-selection {
+            margin-bottom: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .subject-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .subject-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .subject-card.active {
+            border-color: var(--primary-color);
+            background: #eef2ff;
+        }
+        
+        .subject-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .quiz-content {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .quiz-progress {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-counter {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .question-card {
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .option:hover {
+            background: #eef2ff;
+        }
+        
+        .option.selected {
+            border-color: var(--primary-color);
+            background: #eef2ff;
+        }
+        
+        .option.correct {
+            border-color: var(--success-color);
+            background: #e8f5e9;
+        }
+        
+        .option.incorrect {
+            border-color: var(--danger-color);
+            background: #ffeef0;
+        }
+        
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .option.selected .option-letter {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .quiz-results {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .quiz-results.active {
+            display: block;
+        }
+        
+        .results-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        
+        .results-icon.good {
+            color: var(--success-color);
+        }
+        
+        .results-icon.average {
+            color: var(--warning-color);
+        }
+        
+        .results-icon.poor {
+            color: var(--danger-color);
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+        
+        .score-good {
+            background: #e8f5e9;
+            color: var(--success-color);
+            border: 5px solid var(--success-color);
+        }
+        
+        .score-average {
+            background: #fff8e1;
+            color: var(--warning-color);
+            border: 5px solid var(--warning-color);
+        }
+        
+        .score-poor {
+            background: #ffeef0;
+            color: var(--danger-color);
+            border: 5px solid var(--danger-color);
+        }
+        
+        .score-text {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        .result-details {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-label {
+            color: var(--gray-color);
+        }
+        
+        .detail-value {
+            font-weight: 600;
+        }
+        
+        .restart-btn {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Éduc</span>Pro
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Tableau de bord</a>
+                <a href="cours.html"><i class="fas fa-folder"></i> Documents</a>
+                <a href="quiz.html" class="active"><i class="fas fa-question-circle"></i> Quiz</a>
+                <a href="reminders.html"><i class="fas fa-bell"></i> Rappels</a>
+                <a href="profile.html"><i class="fas fa-user"></i> Profil</a>
+            </div>
+            
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Quiz Section -->
+    <section class="quiz-container">
+        <div class="container">
+            <div class="quiz-header">
+                <h1>Quiz de révision</h1>
+                <div class="quiz-timer">
+                    <i class="fas fa-clock"></i> Temps: <span id="timer">00:00</span>
+                </div>
+            </div>
+            
+            <!-- Sélection de matière -->
+            <div class="subject-selection" id="subjectSelection">
+                <h2>Sélectionnez une matière</h2>
+                <p>Choisissez une matière pour commencer le quiz. Chaque quiz contient 10 questions.</p>
+                
+                <div class="subject-grid">
+                    <div class="subject-card" data-subject="math">
+                        <div class="subject-icon">
+                            <i class="fas fa-square-root-alt"></i>
+                        </div>
+                        <h3>Mathématiques</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="physics">
+                        <div class="subject-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h3>Education civique</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="chemistry">
+                        <div class="subject-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3>Comptabilité</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="biology">
+                        <div class="subject-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h3>Architecture des Ordinateurs</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="history">
+                        <div class="subject-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3>Environement des ordinateurs</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="french">
+                        <div class="subject-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Français</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="english">
+                        <div class="subject-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>Anglais</h3>
+                        <p>10 questions</p>
+                    </div>
+                    
+                    <div class="subject-card" data-subject="computer">
+                        <div class="subject-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Informatique</h3>
+                        <p>10 questions</p>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" id="startQuizBtn" style="margin-top: 30px; padding: 12px 40px;">
+                    Commencer le quiz
+                </button>
+            </div>
+            
+            <!-- Contenu du quiz -->
+            <div class="quiz-content" id="quizContent" style="display: none;">
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="question-counter">
+                        <span>Question <span id="currentQuestion">1</span>/<span id="totalQuestions">10</span></span>
+                        <span id="currentSubject">Mathématiques</span>
+                    </div>
+                </div>
+                
+                <div class="question-card active" id="questionCard1">
+                    <div class="question-text" id="questionText1">
+                        Chargement de la question...
+                    </div>
+                    
+                    <div class="options-container" id="optionsContainer1">
+                        <!-- Les options seront insérées ici par JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="quiz-controls">
+                    <button class="btn-secondary" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Question précédente
+                    </button>
+                    <button class="btn-primary" id="nextBtn">
+                        Question suivante <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-primary" id="submitQuizBtn" style="display: none;">
+                        <i class="fas fa-paper-plane"></i> Soumettre le quiz
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Résultats du quiz -->
+            <div class="quiz-content" id="quizResults" style="display: none;">
+                <div class="quiz-results">
+                    <div class="results-icon good" id="resultsIcon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    
+                    <h2>Quiz terminé !</h2>
+                    <p id="resultsMessage">Félicitations ! Vous avez bien réussi le quiz.</p>
+                    
+                    <div class="score-circle score-good" id="scoreCircle">
+                        <span id="scoreValue">8/10</span>
+                        <span class="score-text" id="scorePercentage">80%</span>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Matière :</span>
+                            <span class="detail-value" id="resultSubject">Mathématiques</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Questions correctes :</span>
+                            <span class="detail-value" id="resultCorrect">8</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Questions incorrectes :</span>
+                            <span class="detail-value" id="resultIncorrect">2</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Temps passé :</span>
+                            <span class="detail-value" id="resultTime">00:05:23</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Score :</span>
+                            <span class="detail-value" id="resultScore">80%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="restart-btn">
+                        <button class="btn-secondary" id="reviewBtn">
+                            <i class="fas fa-redo"></i> Revoir les réponses
+                        </button>
+                        <button class="btn-primary" id="newQuizBtn">
+                            <i class="fas fa-plus"></i> Nouveau quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/quiz.js"></script>
+</body>
+</html>

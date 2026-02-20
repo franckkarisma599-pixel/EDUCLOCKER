@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code - Educ Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #4361ee, #3f37c9);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .qr-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 3rem;
+            color: #4361ee;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+        
+        .logo span {
+            color: #4361ee;
+        }
+        
+        .qr-code-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        
+        #qrcode {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .url-input {
+            margin: 20px 0;
+        }
+        
+        .url-input input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .url-input input:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-generate {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-generate:hover {
+            background: #3f37c9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            text-align: left;
+            background: #eef2ff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .instructions h3 {
+            color: #4361ee;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .download-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .download-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn.png {
+            background: #4361ee;
+            color: white;
+        }
+        
+        .download-btn.pdf {
+            background: #f72585;
+            color: white;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .alert {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .alert i {
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 600px) {
+            .qr-container {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .download-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="qr-container">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <h1><span>Educ</span> Locker</h1>
+        </div>
+        
+        <h2 style="color: #333; margin-bottom: 20px;">QR Code d'accès à la plateforme</h2>
+        <p style="color: #666; margin-bottom: 30px;">Scannez ce code avec votre téléphone pour accéder à Educ Locker</p>
+        
+        <div class="qr-code-container">
+            <div id="qrcode"></div>
+        </div>
+        
+        <div class="url-input">
+            <input type="text" id="urlInput" value="http://educlockercours.netlify.app" placeholder="Entrez l'URL de votre site">
+            <button class="btn-generate" id="generateBtn">
+                <i class="fas fa-sync-alt"></i> Générer le QR Code
+            </button>
+        </div>
+        
+        <div class="download-options">
+            <button class="download-btn png" id="downloadPNG">
+                <i class="fas fa-download"></i> Télécharger PNG
+            </button>
+            <button class="download-btn pdf" id="downloadPDF">
+                <i class="fas fa-file-pdf"></i> Télécharger PDF
+            </button>
+        </div>
+        
+        
+        <div class="">
+            <i class=""></i>
+            <div>
+                <strong></strong>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Initialisation
+        let qrcode;
+        const defaultURL = "http://educlockercours.netlify.app";
+        
+        // Générer le QR Code initial
+        function generateQRCode(url) {
+            document.getElementById('qrcode').innerHTML = '';
+            qrcode = new QRCode(document.getElementById('qrcode'), {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+        
+        // Générer au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQRCode(defaultURL);
+            
+            // Bouton de génération
+            document.getElementById('generateBtn').addEventListener('click', function() {
+                const url = document.getElementById('urlInput').value.trim();
+                if (url) {
+                    generateQRCode(url);
+                    showNotification('QR Code mis à jour avec succès !', 'success');
+                } else {
+                    showNotification('Veuillez entrer une URL valide', 'error');
+                }
+            });
+            
+            // Télécharger PNG
+            document.getElementById('downloadPNG').addEventListener('click', function() {
+                const canvas = document.querySelector('#qrcode canvas');
+                if (canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'educ-pro-qrcode.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    showNotification('QR Code téléchargé en PNG !', 'success');
+                }
+            });
+            
+            // Télécharger PDF
+            document.getElementById('downloadPDF').addEventListener('click', function() {
+                const canvas = document.querySelector('#qrcode canvas');
+                if (canvas) {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF();
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    // Ajouter le logo et le texte
+                    pdf.setFontSize(20);
+                    pdf.setTextColor(67, 97, 238);
+                    pdf.text('Educ Pro', 105, 20, null, null, 'center');
+                    
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(100, 100, 100);
+                    pdf.text('Plateforme de gestion de cours pour étudiants', 105, 28, null, null, 'center');
+                    
+                    // Ajouter le QR Code
+                    pdf.addImage(imgData, 'PNG', 55, 40, 100, 100);
+                    
+                    // Ajouter l'URL
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(150, 150, 150);
+                    pdf.text('URL : ' + document.getElementById('urlInput').value, 105, 150, null, null, 'center');
+                    
+                    // Ajouter la date
+                    const date = new Date().toLocaleDateString('fr-FR');
+                    pdf.text('Généré le : ' + date, 105, 155, null, null, 'center');
+                    
+                    // Sauvegarder
+                    pdf.save('educ-pro-qrcode.pdf');
+                    showNotification('QR Code téléchargé en PDF !', 'success');
+                }
+            });
+        });
+        
+        // Fonction de notification
+        function showNotification(message, type) {
+            // Créer la notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4BB543' : '#ff4444'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Ajouter les animations CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

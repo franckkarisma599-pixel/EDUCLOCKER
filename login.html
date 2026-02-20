@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Étudiant Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Éduc</span>Pro
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="login.html" class="active"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                <a href="register.html"><i class="fas fa-user-plus"></i> Inscription</a>
+            </div>
+            
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Connexion -->
+    <section class="auth-container">
+        <div class="auth-card">
+            <h2 class="auth-title">Connexion</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" placeholder="Votre mot de passe" required>
+                </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Se souvenir de moi</label>
+                    </div>
+                    <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;">
+                    Se connecter
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Pas encore de compte ? <a href="register.html">Créer un compte</a></p>
+            </div>
+            
+            <div class="social-login">
+                <p style="text-align: center; margin: 20px 0; color: var(--gray-color);">Ou connectez-vous avec</p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background-color: #f5f5f5; border-radius: 50%; color: var(--dark-color); text-decoration: none; font-size: 1.2rem;">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="#" style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; background-color: #f5f5f5; border-radius: 50%; color: var(--dark-color); text-decoration: none; font-size: 1.2rem;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

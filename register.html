@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Éduc Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Éduc</span>Pro
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Accueil</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                <a href="register.html" class="active"><i class="fas fa-user-plus"></i> Inscription</a>
+            </div>
+            
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Inscription -->
+    <section class="auth-container">
+        <div class="auth-card">
+            <h2 class="auth-title">Créer un compte</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="fullName">Nom complet</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Votre nom complet" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" placeholder="Créez un mot de passe sécurisé" required>
+                    <small style="color: var(--gray-color); display: block; margin-top: 5px;">Le mot de passe doit contenir au moins 8 caractères</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Retapez votre mot de passe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="studyLevel">Niveau d'études</label>
+                    <select id="studyLevel" name="studyLevel" required>
+                        <option value="" disabled selected>Sélectionnez votre niveau</option>
+                        <option value="lycee">Lycée</option>
+                        <option value="bac1">BAC+1</option>
+                        <option value="bac2">BAC+2</option>
+                        <option value="bac3">BAC+3</option>
+                        <option value="bac4">BAC+4</option>
+                        <option value="bac5">BAC+5</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="field">Domaine d'études</label>
+                    <input type="text" id="field" name="field" placeholder="Ex: Informatique, Médecine, Droit...">
+                </div>
+                
+                <div class="form-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">J'accepte les <a href="#" style="color: var(--primary-color);">conditions d'utilisation</a> et la <a href="#" style="color: var(--primary-color);">politique de confidentialité</a></label>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;">
+                    Créer mon compte
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Vous avez déjà un compte ? <a href="login.html">Se connecter</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
